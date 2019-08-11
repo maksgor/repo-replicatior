@@ -15,7 +15,7 @@ async def callback(request):
     code = request.query.get('code')
 
     if not code:
-        return Response(text='Code not provided')
+        return Response(text='OAUTH code not found!')
 
     access_token = await get_access_token(
         request.app['client_session'],
@@ -25,7 +25,7 @@ async def callback(request):
     )
 
     if not access_token:
-        return Response(text='No access token')
+        return Response(text='Could not get OAUTH token!')
 
     new_repo_data = await copy_repository(
         request.app['client_session'],
@@ -38,9 +38,11 @@ async def callback(request):
             text='\n'.join(err for err in new_repo_data['errors'])
         )
 
-    if not new_repo_data.get('html_url'):
+    html_url = new_repo_data.get('html_url')
+
+    if not html_url:
         return Response(
-            text='Something went wrong'
+            text='Something went wrong!'
         )
 
-    raise HTTPFound(new_repo_data.get('html_url'))
+    raise HTTPFound(html_url)
