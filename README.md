@@ -44,4 +44,16 @@ to create repository from a template repository (in our case, the template repos
 is the current one).
 
 This application can replicate any other repository you specify, if only this repository
-is template (there is a flag under the repository name field on the Settings page).
+is a template (there is a flag under the repository name field on the Settings page).
+
+## Deploy
+
+This app is deployed with heroku and is available at https://repo-replicator.herokuapp.com .
+
+To avoid secrets in a repo, they are read from environment when
+deployed on heroku.
+
+But, at the same time, if you want to deploy it
+at another platform, such as Kubernetes, you can easily mount volume with secrets
+file to a container, and set the full path to the file under the key
+`CONFIG_PATH` in container environment.
